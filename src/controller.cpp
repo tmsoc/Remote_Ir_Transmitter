@@ -59,15 +59,36 @@ void Controller::subSettingChoice() {
     // get new IR code setting 
     case 0: 
         view->irSignalInfo_v("Protocal", 0x21, 0x34);
+        delay(3000);
         break;
     case 1:
         view->ipInfo_v(IPAddress(192,168,1,1));
+        delay(3000);
         break;
     case 2:
-        view->backlightSetting_v();
+        backlightSettingsConfig();
         break;    
     default:
         break;
     }
+}
+
+void Controller::backlightSettingsConfig() {
+    view->backlightSetting_v();
+    bool choiceMade = false;
+    while (!choiceMade) {
+        if (btn->readInputs()) {
+            if (btnArray[btn->UP] == HIGH && btnArray[btn->DOWN] == HIGH) {
+                backlightSetting = true;
+                choiceMade = true;
+            }
+            else if (btnArray[btn->LEFT] == HIGH && btnArray[btn->RIGHT] == HIGH) {
+                backlightSetting = false;
+                choiceMade = true;
+            }
+        }
+    }
+    view->saving_v();
     delay(3000);
+    // TODO - Need to save settings to SD card
 }

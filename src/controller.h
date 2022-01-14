@@ -39,6 +39,7 @@ private:
     void settingsViewBtnPress();
 
     void subSettingChoice();
+    void backlightSettingsConfig();
 
     Ir_lcd *view;
     NavButtons *btn;
