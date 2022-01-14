@@ -69,7 +69,7 @@ void Ir_lcd::transmitInfo_v(const String &dev, const String &func) {
 }
 
 void Ir_lcd::setup_v(const String &menu) {
-    headerFooter("Menu:", menu);
+    headerFooter("Settings Menu:", menu);
 }
 
 void Ir_lcd::ipInfo_v(const IPAddress &ip) {
@@ -108,10 +108,10 @@ void Ir_lcd::saveChange_v() {
     lcd.clear();
     lcd.print("Save Changes:");
     lcd.setCursor(0, 1);
+    printUpDown();
+    lcd.print("Save ");
     printLeft();
     printRight();
-    lcd.print("Save ");
-    printUpDown();
     lcd.print("Exit");
 }
 

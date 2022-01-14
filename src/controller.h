@@ -40,6 +40,11 @@ private:
 
     void subSettingChoice();
     void backlightSettingsConfig();
+    void assignIrControl();
+    bool selectDevice(uint8_t &dev);
+    bool selectFunction(uint8_t &func);
+    bool receiveIrSignal(uint8_t &prot, uint16_t &addr, uint8_t &command);
+    bool saveAllSetting();
 
     Ir_lcd *view;
     NavButtons *btn;
