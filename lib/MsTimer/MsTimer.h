@@ -35,7 +35,7 @@ public:
      * @return true The timer is active
      * @return false The timer is not active
      */
-    bool getStatus();
+    bool getStatus() const;
 
     /**
      * @brief Clears the timer and sets it to not active. 

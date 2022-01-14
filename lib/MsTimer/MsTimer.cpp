@@ -20,7 +20,7 @@ void MsTimer::setTimer(unsigned int ms) {
     triggerTime = setTime + ms;
 }
 
-bool MsTimer::getStatus() {
+bool MsTimer::getStatus() const {
     // gets the current time ms time
     unsigned long current = millis();
     // tests if the timer has not been set
