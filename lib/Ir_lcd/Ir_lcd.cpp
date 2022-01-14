@@ -119,10 +119,10 @@ void Ir_lcd::backlightSetting_v() {
     lcd.clear();
     lcd.print("Backlight:");
     lcd.setCursor(0, 1);
+    printUpDown();
+    lcd.print("On ");
     printLeft();
     printRight();
-    lcd.print("On ");
-    printUpDown();
     lcd.print("Off");
 }
 
