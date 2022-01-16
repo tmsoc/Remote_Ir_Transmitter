@@ -196,6 +196,10 @@ bool Controller::receiveIrSignal(uint8_t &prot, uint16_t &addr, uint8_t &command
     delay(3000);
     return true;
     // TODO - Need to implement this function.
+    // Remove by reference and have the variables local within scope
+    // store the values to memory
+    // add a function to test the signal by pressing UP
+    // if values are received return true
 }
 
 bool Controller::saveAllSetting() {
@@ -218,4 +222,5 @@ bool Controller::saveAllSetting() {
         delay(3000);
         // TODO - save all setting to sd card
     }
+    return saveSettings;
 }

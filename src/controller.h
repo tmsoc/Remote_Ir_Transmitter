@@ -3,6 +3,7 @@
 #define CONTROLLER_H
 
 #include <Arduino.h>
+// #include <IRremote.hpp>
 
 #include "IR_util.h"
 #include "Ir_lcd.h"
@@ -18,6 +19,8 @@ public:
      * @param navArray The input array that contains the stored input values
      */
     Controller(Ir_lcd &view, NavButtons &input, bool navArray[]);
+
+    // void loadSavedIrMessages() const;
 
     /**
      * Sets the backlight mode to always on or on a timer.
@@ -51,6 +54,7 @@ private:
     bool *btnArray;
     bool backlightSetting;
     uint8_t currentView;
+    // IRData *messages;
 };
 
 #endif /* CONTROLLER_H */

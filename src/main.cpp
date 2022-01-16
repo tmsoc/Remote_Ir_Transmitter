@@ -1,16 +1,22 @@
 
 
 #include <Arduino.h>
-
-// IRremote by Armin Joachimsmeyer
-// https://registry.platformio.org/libraries/z3t0/IRremote
-// https://github.com/Arduino-IRremote/Arduino-IRremote?utm_source=platformio&utm_medium=piohome
-// #include <IRremote.hpp>
+// #include <EEPROM.h>
+// #include <Ethernet.h>
+/**
+ * IRremote by Armin Joachimsmeyer
+ * https://registry.platformio.org/libraries/z3t0/IRremote
+ * https://github.com/Arduino-IRremote/Arduino-IRremote?utm_source=platformio&utm_medium=piohome
+ */
+#include <IRremote.hpp>
 
 #include "controller.h"
 #include "Ir_lcd.h"
 #include "IR_util.h"
 #include "NavButtons.h"
+
+// 2D array of stored IR messages
+// IRData messages[DEV_CNT][FUNC_CNT];
 
 // lcd display
 Ir_lcd lcd(LCD_ADDRESS, LCD_COL_CNT, LCD_ROW_CNT);
@@ -27,6 +33,7 @@ Controller ctr(lcd, navInput, navArray);
 
 void setup() {
     // Serial.begin(115200);
+
     lcd.init();
     lcd.initializing_v(3);
     delay(2000);
