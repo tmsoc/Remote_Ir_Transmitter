@@ -1,19 +1,21 @@
-
-
 #include <Arduino.h>
-// #include <EEPROM.h>
-// #include <Ethernet.h>
-/**
- * IRremote by Armin Joachimsmeyer
- * https://registry.platformio.org/libraries/z3t0/IRremote
- * https://github.com/Arduino-IRremote/Arduino-IRremote?utm_source=platformio&utm_medium=piohome
- */
+#include <LiquidCrystal_I2C.h>
+#include <SPI.h>
+#include <WiFi101.h>
+#include <WiFiUdp.h>
+#include <Wire.h>
 #include <IRremote.hpp>
 
-#include "controller.h"
+#include "Controller.h"
 #include "Ir_lcd.h"
 #include "IR_util.h"
 #include "NavButtons.h"
+
+// WiFi_Secrets.h contains the wifi ssid and password
+// contains the following definitions
+// #define SECRET_SSID ""
+// #define SECRET_PASS ""
+#include "WiFi_Secrets.h"
 
 // 2D array of stored IR messages
 // IRData messages[DEV_CNT][FUNC_CNT];
@@ -28,8 +30,7 @@ NavButtons navInput(LEFT_PIN, RIGHT_PIN, UP_PIN, DOWN_PIN, navArray);
 // uint8_t currentView = LCD_MAIN_VIEW;
 
 // The controller
-Controller ctr(lcd, navInput, navArray);
-
+Controller ctrl(lcd, navInput, navArray); // Needs functions, sender, & receiver
 
 void setup() {
     // Serial.begin(115200);
@@ -41,16 +42,16 @@ void setup() {
     // ----- SECTION TO IMPORT PROGRAM DATA ------
 
     lcd.transmitInfo_v("", "");
-    ctr.setBacklightMode(false);    // TODO - Need to import from sd card
+    ctrl.setBacklightMode(false);       // TODO - Need to import from data
     lcd.setBacklightTimer(ONE_MIN / 4); // TODO - Remove offset
-} // end of setup
+    
+}   // end of setup()
 
 void loop() {
-    
     lcd.backlightTimeout();
 
     if (navInput.readInputs()) {
-        ctr.homeViewBtnPress();
+        ctrl.homeViewBtnPress();
     }
 
-} // end of loop
+}   // end of loop()

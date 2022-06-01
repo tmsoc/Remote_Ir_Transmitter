@@ -1,5 +1,6 @@
+#include <Arduino.h>
 
-#include "controller.h"
+#include "Controller.h"
 
 Controller::Controller(Ir_lcd &lcd, NavButtons &input, bool navArray[]) : 
 backlightSetting(false), currentView(LCD_MAIN_VIEW)
@@ -16,30 +17,55 @@ void Controller::setBacklightMode(bool alwaysOn) {
 
 void Controller::homeViewBtnPress() {
     view->setBacklightTimer(ONE_MIN / 4); // TODO - Remove offset
-    if (currentView == LCD_MAIN_VIEW) {
-        mainViewBtnPress();
-    }
-    else {
-        settingsViewBtnPress();
+    // if (currentView == LCD_MAIN_VIEW) {
+    //     mainViewBtnPress();
+    // }
+    // else {
+    //     settingsViewBtnPress();
+    // }
+    
+    // if the up and down button are both pressed, enter the settings view
+    if (btnArray[btn->UP] == HIGH && btnArray[btn->DOWN] == HIGH) {
+        // currentView = PROGRAMMER_VIEW;
+        // view->setup_v(IR_Util::menuList[currentView]);
+        // view->setBacklightMode(true);
+        settingsLoop();
+        view->setBacklightTimer(ONE_MIN / 4); // TODO - remove offset
     }
 }
 
 // ------ PRIVATE FUNCTIONS ------
 
-void Controller::mainViewBtnPress() {
-    // if the up and down button are both pressed, enter the settings view
-    if (btnArray[btn->UP] == HIGH && btnArray[btn->DOWN] == HIGH) {
-        currentView = 0;
-        view->setup_v(IR_Util::menuList[currentView]);
-        view->setBacklightMode(true);
+// void Controller::mainViewBtnPress() {
+//     // if the up and down button are both pressed, enter the settings view
+//     if (btnArray[btn->UP] == HIGH && btnArray[btn->DOWN] == HIGH) {
+//         // currentView = PROGRAMMER_VIEW;
+//         // view->setup_v(IR_Util::menuList[currentView]);
+//         // view->setBacklightMode(true);
+//         settingsLoop();
+//         view->setBacklightTimer(ONE_MIN / 4); // TODO - remove offset
+//     }
+// }
+
+void Controller::settingsLoop() {
+    currentView = PROGRAMMER_VIEW;
+    view->setup_v(IR_Util::menuList[currentView]);
+    view->setBacklightMode(true);
+    bool continueLoop = true;
+    while (continueLoop) {
+        if (btn->readInputs()) {
+            continueLoop = !settingsViewBtnPress();
+        }
     }
 }
 
-void Controller::settingsViewBtnPress() {
+bool Controller::settingsViewBtnPress() {
+    bool exitSettings = false;
     if (btnArray[btn->LEFT] == HIGH) {
         currentView = LCD_MAIN_VIEW;
         view->transmitInfo_v("", "");
         view->setBacklightMode(backlightSetting);
+        exitSettings = true;
     }
     else if (btnArray[btn->UP] == HIGH || btnArray[btn->DOWN] == HIGH) {
         if (btnArray[btn->UP] == HIGH)
@@ -52,19 +78,20 @@ void Controller::settingsViewBtnPress() {
         subSettingChoice();
         view->setup_v(IR_Util::menuList[currentView]);
     }
+    return exitSettings;
 }
 
 void Controller::subSettingChoice() {
     switch (currentView) {
     // get new IR code setting 
-    case 0: 
+    case PROGRAMMER_VIEW: 
         assignIrControl();
         break;
-    case 1:
+    case NETWORK_VIEW:
         view->ipInfo_v(IPAddress(192,168,1,1));
         delay(3000);
         break;
-    case 2:
+    case BACKLIGHT_VIEW:
         backlightSettingsConfig();
         break;    
     default:
@@ -192,7 +219,7 @@ bool Controller::selectFunction(uint8_t &func) {
 }
 
 bool Controller::receiveIrSignal(uint8_t &prot, uint16_t &addr, uint8_t &command) {
-    view->irSignalInfo_v("Panisonic", 0x21, 0x34);
+    view->irSignalInfo_v("Panasonic", 0x21, 0x34);
     delay(3000);
     return true;
     // TODO - Need to implement this function.

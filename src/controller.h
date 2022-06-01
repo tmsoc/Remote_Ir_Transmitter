@@ -3,7 +3,9 @@
 #define CONTROLLER_H
 
 #include <Arduino.h>
-// #include <IRremote.hpp>
+
+#define USE_IRREMOTE_HPP_AS_PLAIN_INCLUDE
+#include <IRremote.hpp>
 
 #include "IR_util.h"
 #include "Ir_lcd.h"
@@ -37,9 +39,11 @@ public:
 
 private:
 
+    void settingsLoop();
+
     // button presses within the main view or settings views
-    void mainViewBtnPress();
-    void settingsViewBtnPress();
+    // void mainViewBtnPress();
+    bool settingsViewBtnPress();
 
     void subSettingChoice();
     void backlightSettingsConfig();
@@ -54,7 +58,7 @@ private:
     bool *btnArray;
     bool backlightSetting;
     uint8_t currentView;
-    // IRData *messages;
+    // IRData *functions;
 };
 
 #endif /* CONTROLLER_H */

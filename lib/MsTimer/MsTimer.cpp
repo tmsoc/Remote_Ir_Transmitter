@@ -20,7 +20,7 @@ void MsTimer::setTimer(unsigned int ms) {
     triggerTime = setTime + ms;
 }
 
-bool MsTimer::getStatus() const {
+bool MsTimer::getStatus() {
     // gets the current time ms time
     unsigned long current = millis();
     // tests if the timer has not been set
@@ -28,12 +28,18 @@ bool MsTimer::getStatus() const {
         return false;
     // tests if time has been reached or expired 
     // accounts for millis() overflow
-    if (setTime < triggerTime && triggerTime <= current)
+    if (setTime < triggerTime && triggerTime <= current) {
+        clearTimer();
         return false;
-    if (setTime < triggerTime && current < setTime)
+    }
+    if (setTime < triggerTime && current < setTime) {
+        clearTimer();
         return false;
-    if (setTime > triggerTime && current > triggerTime && current < setTime)
+    }
+    if (setTime > triggerTime && current > triggerTime && current < setTime) {
+        clearTimer();
         return false;
+    }
     // The timer is still active
     return true;    
 }

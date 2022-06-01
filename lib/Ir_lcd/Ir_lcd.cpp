@@ -52,78 +52,78 @@ void Ir_lcd::setBacklightMode(bool alwaysOn) {
 
 void Ir_lcd::initializing_v(uint8_t periodCnt) {
     lcd.clear();
-    lcd.print("Initializing");
+    lcd.print(F("Initializing"));
     // 4 is the max number of perods
     uint8_t iter = min(periodCnt, 4); 
     for (uint8_t i = 0; i < iter; i++)
-        lcd.print(".");
+        lcd.print(F("."));
 }
 
 void Ir_lcd::transmitInfo_v(const String &dev, const String &func) {
     lcd.clear();
-    lcd.print("Dev: ");
+    lcd.print(F("Dev: "));
     lcd.print(dev);
     lcd.setCursor(0, 1);
-    lcd.print("Func: ");
+    lcd.print(F("Func: "));
     lcd.print(func);
 }
 
 void Ir_lcd::setup_v(const String &menu) {
-    headerFooter("Settings Menu:", menu);
+    headerFooter(F("Settings Menu:"), menu);
 }
 
 void Ir_lcd::ipInfo_v(const IPAddress &ip) {
     lcd.clear();
-    lcd.print("IP:");
+    lcd.print(F("IP:"));
     lcd.setCursor(0, 1);
     lcd.print(ip);
 }
 
 void Ir_lcd::deviceSelect_v(const String &dev) {
-    headerFooter("Device:", dev);
+    headerFooter(F("Device:"), dev);
 }
 
 void Ir_lcd::funcSelect_v(const String &func) {
-    headerFooter("Function:", func);
+    headerFooter(F("Function:"), func);
 }
 
 void Ir_lcd::irSignalInfo_v(const String &protocal, uint16_t address, uint8_t command) {
     lcd.clear();
-    lcd.print("P: ");
+    lcd.print(F("P: "));
     lcd.print(protocal);
     lcd.setCursor(0, 1);
-    lcd.print("A: ");
+    lcd.print(F("A: "));
     lcd.print(address, HEX);
     lcd.setCursor(8, 1);
-    lcd.print("C: ");
+    lcd.print(F("C: "));
     lcd.print(command, HEX);
 }
 
 void Ir_lcd::saving_v() {
     lcd.clear();
-    lcd.print("Saving...");
+    lcd.print(F("Saving..."));
 }
 
 void Ir_lcd::saveChange_v() {
     lcd.clear();
-    lcd.print("Save Changes:");
+    lcd.print(F("Save Changes:"));
     lcd.setCursor(0, 1);
     printUpDown();
-    lcd.print("Save ");
+    lcd.print(F("Save "));
     printLeft();
     printRight();
-    lcd.print("Exit");
+    lcd.print(F("Exit"));
 }
 
 void Ir_lcd::backlightSetting_v() {
     lcd.clear();
-    lcd.print("Backlight:");
+    lcd.print(F("Backlight:"));
     lcd.setCursor(0, 1);
     printUpDown();
-    lcd.print("On ");
+    lcd.print(F("On "));
     printLeft();
     printRight();
-    lcd.print("Off");
+    lcd.print(F("Off"));
 }
 
 

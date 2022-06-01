@@ -3,10 +3,10 @@
 
 #include <Arduino.h>
 
-#define LEFT_PIN 5
-#define RIGHT_PIN 6
-#define UP_PIN 7
-#define DOWN_PIN 8
+#define LEFT_PIN 0
+#define RIGHT_PIN 1
+#define UP_PIN 4
+#define DOWN_PIN 5
 
 #define PROTOCOL_BYTE_SIZE 1
 #define ADDRESS_BYTE_SIZE 2
@@ -16,6 +16,23 @@
 #define FLAGS_BYTE_SIZE 1
 #define DECODED_RAW_DATA_BYTE_SIZE 4
 #define IR_MESSAGE_OFFSET 14
+
+#define IR_RECEIVE_PIN 2
+#define IR_SEND_PIN 3
+// #define ENABLE_LED_FEEDBACK true
+// #define IR_FEEDBACK_PIN 6
+
+#define UDP_PORT 6000
+#define REMOTE_MESSAGE_TYPE 0x52
+#define STATUS_MESSAGE_TYPE 0x53
+#define CONFIG_MESSAGE_TYPE 0x43
+
+namespace UDP_Util {
+
+    // Unique for each ethernet shield used
+    // const byte MAC[] = { 0xA8, 0x61, 0x0A, 0xAE, 0x2E, 0x6E };
+    
+} // end of UDP_Util
 
 namespace IR_Util {
 
@@ -49,6 +66,11 @@ namespace IR_Util {
 
     #define MENU_CNT 3
     const String menuList[] = {"Programmer", "IP Address", "LCD Backlight"};
+    
+    #define PROGRAMMER_VIEW 0
+    #define NETWORK_VIEW 1
+    #define BACKLIGHT_VIEW 2
+    #define LCD_MAIN_VIEW MENU_CNT + 1
 
 } // namespace IR
 
@@ -56,7 +78,6 @@ namespace IR_Util {
 #define LCD_COL_CNT 16
 #define LCD_ROW_CNT 2
 
-#define LCD_MAIN_VIEW MENU_CNT + 1
 
 #define ONE_MIN 60000
 

@@ -12,8 +12,6 @@
 #ifndef IR_LCD
 #define IR_LCD
 
-#include <Wire.h>
-#include <Ethernet.h>
 // LiquidCrystal_I2C by Frank de Brabander version 1.1.4
 //https://github.com/johnrickman/LiquidCrystal_I2C?utm_source=platformio&utm_medium=piohome
 #include <LiquidCrystal_I2C.h>
