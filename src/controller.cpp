@@ -88,8 +88,7 @@ void Controller::subSettingChoice() {
         assignIrControl();
         break;
     case NETWORK_VIEW:
-        view->ipInfo_v(IPAddress(192,168,1,1));
-        delay(3000);
+        ipAddressDisplay();
         break;
     case BACKLIGHT_VIEW:
         backlightSettingsConfig();
@@ -117,6 +116,18 @@ void Controller::backlightSettingsConfig() {
     view->saving_v();
     delay(3000);
     // TODO - Need to save settings to SD card
+}
+
+void Controller::ipAddressDisplay() {
+    IPAddress ip = WiFi.localIP();
+    view->ipInfo_v(ip);
+    bool continueLoop = true;
+    while (continueLoop) {
+        if (btn->readInputs()) {
+            if (btnArray[btn->LEFT]) 
+                continueLoop = false;
+        }
+    }
 }
 
 void Controller::assignIrControl() {

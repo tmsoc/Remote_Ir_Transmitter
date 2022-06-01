@@ -99,6 +99,13 @@ void Ir_lcd::irSignalInfo_v(const String &protocal, uint16_t address, uint8_t co
     lcd.print(command, HEX);
 }
 
+void Ir_lcd::wifiNotConnected_v() {
+    lcd.clear();
+    lcd.print("WiFi not");
+    lcd.setCursor(0, 1);
+    lcd.print("connected");
+}
+
 void Ir_lcd::saving_v() {
     lcd.clear();
     lcd.print(F("Saving..."));

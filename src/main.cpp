@@ -22,9 +22,15 @@
 
 // lcd display
 Ir_lcd lcd(LCD_ADDRESS, LCD_COL_CNT, LCD_ROW_CNT);
+
 // navigational buttons
 bool navArray[NAV_SIZE];
 NavButtons navInput(LEFT_PIN, RIGHT_PIN, UP_PIN, DOWN_PIN, navArray);
+
+// WiFi variables
+WiFiUDP udp;
+byte buffer[MAX_UDP_BUFFER];
+u_int16_t wifiStatus = WL_IDLE_STATUS;
 
 // // for main view display
 // uint8_t currentView = LCD_MAIN_VIEW;
@@ -35,11 +41,22 @@ Controller ctrl(lcd, navInput, navArray); // Needs functions, sender, & receiver
 void setup() {
     // Serial.begin(115200);
 
+    // Initializes the lcd display
     lcd.init();
-    lcd.initializing_v(3);
-    delay(2000);
+    lcd.initializing_v(1);
+    delay(500);
+
+    // Connecting to WiFi
+    wifiStatus = WiFi.begin(SECRET_SSID, SECRET_PASS);
+    delay(500);
+    udp.begin(6000);
+    lcd.initializing_v(2);
 
     // ----- SECTION TO IMPORT PROGRAM DATA ------
+
+    lcd.initializing_v(3);
+    delay(500);
+
 
     lcd.transmitInfo_v("", "");
     ctrl.setBacklightMode(false);       // TODO - Need to import from data
@@ -48,8 +65,31 @@ void setup() {
 }   // end of setup()
 
 void loop() {
+    // backlight timer
     lcd.backlightTimeout();
+    
+    // checks wifi status
+    if (wifiStatus != WL_CONNECTED) {
+        while (wifiStatus != WL_CONNECTED) {
+            lcd.wifiNotConnected_v();
+            wifiStatus = WiFi.begin(SECRET_SSID, SECRET_PASS);
+            delay(1000);
+            if (navInput.readInputs()) {
+                ctrl.homeViewBtnPress();
+            }
+        }
+        lcd.transmitInfo_v("", "");
+    }
 
+    int packetSize = udp.parsePacket();
+    if (packetSize > 0) {
+        // checks to see if a udp message has been received.
+
+
+        udp.flush();
+    }
+
+    // user has pressed a button
     if (navInput.readInputs()) {
         ctrl.homeViewBtnPress();
     }

@@ -3,6 +3,7 @@
 #define CONTROLLER_H
 
 #include <Arduino.h>
+#include <WiFi101.h>
 
 #define USE_IRREMOTE_HPP_AS_PLAIN_INCLUDE
 #include <IRremote.hpp>
@@ -47,6 +48,7 @@ private:
 
     void subSettingChoice();
     void backlightSettingsConfig();
+    void ipAddressDisplay();
     void assignIrControl();
     bool selectDevice(uint8_t &dev);
     bool selectFunction(uint8_t &func);

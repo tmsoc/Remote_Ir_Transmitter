@@ -46,6 +46,8 @@ public:
     
     void irSignalInfo_v(const String &protocal, uint16_t address, uint8_t command);
 
+    void wifiNotConnected_v();
+
     void saving_v();
 
     void saveChange_v();
