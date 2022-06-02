@@ -2,12 +2,13 @@
 
 #include "Controller.h"
 
-Controller::Controller(Ir_lcd &lcd, NavButtons &input, bool navArray[]) : 
+Controller::Controller(Ir_lcd &lcd, NavButtons &input, bool navArray[], IR_Util::IRFunction functions[]) : 
 backlightSetting(false), currentView(LCD_MAIN_VIEW)
 {
     view = &lcd;
     btn = &input;
     btnArray = navArray;
+    func = functions;
 }
 
 void Controller::setBacklightMode(bool alwaysOn) {
@@ -53,18 +54,31 @@ void Controller::decodeUdpPacket(byte buffer[], u_int16_t bufferLen) {
     }
 }
 
+
+void Controller::importStoredData() {
+    Eeprom eeprom;
+    for (size_t i = 0; i < DEV_CNT * FUNC_CNT; i++) {
+        byte buffer[FUNCTION_SIZE];
+        size_t offset = i * FUNCTION_SIZE;
+        eeprom.eepromRead(EEPROM_ADDRESS, offset, buffer, FUNCTION_SIZE);
+        func[i].assigned = buffer[0];
+        if (func[i].assigned) {
+            func[i].protocol = buffer[1];
+            func[i].address = buffer[2];
+            func[i].address = func[i].address << 8;
+            func[i].address = func[i].address | buffer[3];
+            func[i].command = buffer[4];
+            func[i].command = func[i].command << 8;
+            func[i].command = func[i].command | buffer[5];
+        }
+    }
+    backlightSetting = eeprom.eepromRead(EEPROM_ADDRESS, BACKLIGHT_EEPROM_OFFSET);
+    view->setBacklightMode(backlightSetting);
+}
+
+
 // ------ PRIVATE FUNCTIONS ------
 
-// void Controller::mainViewBtnPress() {
-//     // if the up and down button are both pressed, enter the settings view
-//     if (btnArray[btn->UP] == HIGH && btnArray[btn->DOWN] == HIGH) {
-//         // currentView = PROGRAMMER_VIEW;
-//         // view->setup_v(IR_Util::MENU_LIST[currentView]);
-//         // view->setBacklightMode(true);
-//         settingsLoop();
-//         view->setBacklightTimer(ONE_MIN / 4); // TODO - remove offset
-//     }
-// }
 
 void Controller::settingsLoop() {
     currentView = PROGRAMMER_VIEW;
@@ -124,7 +138,7 @@ void Controller::backlightSettingsConfig() {
     while (!choiceMade) {
         if (btn->readInputs()) {
             if (btnArray[btn->UP] == HIGH && btnArray[btn->DOWN] == HIGH) {
-                backlightSetting = true;
+                backlightSetting = true;                
                 choiceMade = true;
             }
             else if (btnArray[btn->LEFT] == HIGH && btnArray[btn->RIGHT] == HIGH) {
@@ -134,8 +148,9 @@ void Controller::backlightSettingsConfig() {
         }
     }
     view->saving_v();
+    Eeprom eeprom;
+    eeprom.eepromWrite(EEPROM_ADDRESS, BACKLIGHT_EEPROM_OFFSET, byte(backlightSetting));
     delay(3000);
-    // TODO - Need to save settings to SD card
 }
 
 

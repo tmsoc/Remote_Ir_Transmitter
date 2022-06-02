@@ -3,19 +3,27 @@
 
 #include <Arduino.h>
 
+#include "EEPROM_24xx64.h"
+
 #define LEFT_PIN 0
 #define RIGHT_PIN 1
 #define UP_PIN 4
 #define DOWN_PIN 5
 
+#define ASSIGNED_BYTE_SIZE 1
 #define PROTOCOL_BYTE_SIZE 1
 #define ADDRESS_BYTE_SIZE 2
 #define COMMAND_BYTE_SIZE 2
-#define EXTRA_BYTE_SIZE 2
-#define NUMBEROFBITS_BYTE_SIZE 2
-#define FLAGS_BYTE_SIZE 1
-#define DECODED_RAW_DATA_BYTE_SIZE 4
-#define IR_MESSAGE_OFFSET 14
+#define FUNCTION_SIZE 6
+
+// #define PROTOCOL_BYTE_SIZE 1
+// #define ADDRESS_BYTE_SIZE 2
+// #define COMMAND_BYTE_SIZE 2
+// #define EXTRA_BYTE_SIZE 2
+// #define NUMBEROFBITS_BYTE_SIZE 2
+// #define FLAGS_BYTE_SIZE 1
+// #define DECODED_RAW_DATA_BYTE_SIZE 4
+// #define IR_MESSAGE_OFFSET 14
 
 #define IR_RECEIVE_PIN 2
 #define IR_SEND_PIN 3
@@ -75,11 +83,27 @@ namespace IR_Util {
     #define BACKLIGHT_VIEW 2
     #define LCD_MAIN_VIEW MENU_CNT + 1
 
-} // namespace IR
+    /**
+     * The required stored data to transmit, store, and send 
+     * IR messages.
+     */
+    struct IRFunction {
+        bool assigned;
+        uint8_t protocol;
+        uint16_t address;
+        uint16_t command;
+    };
+
+} // namespace IR_Util
 
 #define LCD_ADDRESS 0x27
 #define LCD_COL_CNT 16
 #define LCD_ROW_CNT 2
+
+
+typedef EEPROM_24xx64 Eeprom;
+#define EEPROM_ADDRESS 0x50
+#define BACKLIGHT_EEPROM_OFFSET 1000
 
 
 #define ONE_MIN 60000

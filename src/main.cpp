@@ -18,8 +18,8 @@
 // #define SECRET_PASS ""
 #include "WiFi_Secrets.h"
 
-// 2D array of stored IR messages
-// IRData messages[DEV_CNT][FUNC_CNT];
+// IR remote stored function
+IR_Util::IRFunction functions[DEV_CNT * FUNC_CNT];
 
 // lcd display
 Ir_lcd lcd(LCD_ADDRESS, LCD_COL_CNT, LCD_ROW_CNT);
@@ -37,10 +37,12 @@ u_int16_t wifiStatus = WL_IDLE_STATUS;
 // uint8_t currentView = LCD_MAIN_VIEW;
 
 // The controller
-Controller ctrl(lcd, navInput, navArray); // Needs functions, sender, & receiver
+Controller ctrl(lcd, navInput, navArray, functions); // Needs sender, & receiver
 
 void setup() {
     // Serial.begin(115200);
+    // delay(5000);
+    // Serial.println(sizeof(decode_type_t));
 
     // Initializes the lcd display
     lcd.init();
@@ -50,17 +52,23 @@ void setup() {
     // Connecting to WiFi
     wifiStatus = WiFi.begin(SECRET_SSID, SECRET_PASS);
     delay(500);
-    udp.begin(6000);
+    udp.begin(UDP_PORT);
     lcd.initializing_v(2);
 
     // ----- SECTION TO IMPORT PROGRAM DATA ------
+    Eeprom eeprom;
+    delay(5);
+    eeprom.begin();
+    ctrl.importStoredData();
+    delay(500);
+
 
     lcd.initializing_v(3);
     delay(500);
 
 
     lcd.transmitInfo_v("", "");
-    ctrl.setBacklightMode(false);       // TODO - Need to import from data
+    // ctrl.setBacklightMode(false);       // TODO - Need to import from data
     lcd.setBacklightTimer(ONE_MIN / 4); // TODO - Remove offset
     
 }   // end of setup()
