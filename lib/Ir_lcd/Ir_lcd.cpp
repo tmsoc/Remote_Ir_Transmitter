@@ -61,10 +61,10 @@ void Ir_lcd::initializing_v(uint8_t periodCnt) {
 
 void Ir_lcd::transmitInfo_v(const String &dev, const String &func) {
     lcd.clear();
-    lcd.print(F("Dev: "));
+    lcd.print(F("D: "));
     lcd.print(dev);
     lcd.setCursor(0, 1);
-    lcd.print(F("Fun: "));
+    lcd.print(F("F: "));
     lcd.print(func);
 }
 

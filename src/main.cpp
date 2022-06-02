@@ -10,6 +10,7 @@
 #include "Ir_lcd.h"
 #include "IR_util.h"
 #include "NavButtons.h"
+#include "EEPROM_24xx64.h"
 
 // WiFi_Secrets.h contains the wifi ssid and password
 // contains the following definitions

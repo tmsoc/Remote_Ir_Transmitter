@@ -48,24 +48,24 @@ public:
 
 private:
 
+    // Menu navigation
     void settingsLoop();
-
-    // button presses within the main view or settings views
-    // void mainViewBtnPress();
     bool settingsViewBtnPress();
-
     void subSettingChoice();
+    // LCD backlight configuration
     void backlightSettingsConfig();
+    // Network functions    
     void ipAddressDisplay();
+    bool verifyUdpHeader(byte buffer[], u_int16_t bufferLen);
+    void decodeUdpRemote(byte buffer[], u_int16_t bufferLen);
+    // Function configurations
     void assignIrControl();
     bool selectDevice(uint8_t &dev);
     bool selectFunction(uint8_t &func);
     bool receiveIrSignal(uint8_t &prot, uint16_t &addr, uint8_t &command);
+    // EEPROM
     bool saveAllSetting();
 
-    // Network functions
-    bool verifyUdpHeader(byte buffer[], u_int16_t bufferLen);
-    void decodeUdpRemote(byte buffer[], u_int16_t bufferLen);
 
     Ir_lcd *view;
     NavButtons *btn;

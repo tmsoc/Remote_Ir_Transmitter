@@ -117,6 +117,7 @@ void Controller::subSettingChoice() {
     }
 }
 
+
 void Controller::backlightSettingsConfig() {
     view->backlightSetting_v();
     bool choiceMade = false;
@@ -137,6 +138,7 @@ void Controller::backlightSettingsConfig() {
     // TODO - Need to save settings to SD card
 }
 
+
 void Controller::ipAddressDisplay() {
     IPAddress ip = WiFi.localIP();
     view->ipInfo_v(ip);
@@ -148,6 +150,37 @@ void Controller::ipAddressDisplay() {
         }
     }
 }
+
+
+bool Controller::verifyUdpHeader(byte buffer[], u_int16_t bufferLen) {
+    bool validHeader = false;
+    if (bufferLen > UDP_HEADER_SIZE) {
+        validHeader = true;
+        byte verifier = 0x01;
+        for (size_t i = 0; i < UDP_HEADER_SIZE; i++) {
+            if (buffer[i] != verifier) {
+                validHeader = false;
+            }
+            verifier = verifier << 1;
+        }
+    }
+    return validHeader;
+}
+
+
+void Controller::decodeUdpRemote(byte buffer[], u_int16_t bufferLen) {
+    if (bufferLen == REMOTE_MESSAGE_SIZE) {
+        
+        byte device = buffer[MESSAGE_TYPE_INDEX + 1];
+        byte function = buffer[MESSAGE_TYPE_INDEX + 2];
+
+        if (device < DEV_CNT && function < FUNC_CNT) {
+            view->transmitInfo_v(IR_Util::DEVICES[device], IR_Util::IR_FUNC[function]);
+            // TODO - implement the transmitting the IR signal
+        }
+    }
+}
+
 
 void Controller::assignIrControl() {
     uint8_t device = 0;
@@ -283,31 +316,3 @@ bool Controller::saveAllSetting() {
 }
 
 
-bool Controller::verifyUdpHeader(byte buffer[], u_int16_t bufferLen) {
-    bool validHeader = false;
-    if (bufferLen > UDP_HEADER_SIZE) {
-        validHeader = true;
-        byte verifier = 0x01;
-        for (size_t i = 0; i < UDP_HEADER_SIZE; i++) {
-            if (buffer[i] != verifier) {
-                validHeader = false;
-            }
-            verifier = verifier << 1;
-        }
-    }
-    return validHeader;
-}
-
-
-void Controller::decodeUdpRemote(byte buffer[], u_int16_t bufferLen) {
-    if (bufferLen == REMOTE_MESSAGE_SIZE) {
-        
-        byte device = buffer[MESSAGE_TYPE_INDEX + 1];
-        byte function = buffer[MESSAGE_TYPE_INDEX + 2];
-
-        if (device < DEV_CNT && function < FUNC_CNT) {
-            view->transmitInfo_v(IR_Util::DEVICES[device], IR_Util::IR_FUNC[function]);
-            // TODO - implement the transmitting the IR signal
-        }
-    }
-}
