@@ -38,6 +38,14 @@ public:
      */
     void homeViewBtnPress();
 
+    /**
+     * Decodes the given UDP message and performs the required action.
+     * 
+     * @param buffer An array of bytes containing the payload of the UDP message
+     * @param bufferLen The number of bytes within the buffer array.
+     */
+    void decodeUdpPacket(byte buffer[], u_int16_t bufferLen);
+
 private:
 
     void settingsLoop();
@@ -54,6 +62,10 @@ private:
     bool selectFunction(uint8_t &func);
     bool receiveIrSignal(uint8_t &prot, uint16_t &addr, uint8_t &command);
     bool saveAllSetting();
+
+    // Network functions
+    bool verifyUdpHeader(byte buffer[], u_int16_t bufferLen);
+    void decodeUdpRemote(byte buffer[], u_int16_t bufferLen);
 
     Ir_lcd *view;
     NavButtons *btn;

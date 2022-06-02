@@ -27,10 +27,29 @@ void Controller::homeViewBtnPress() {
     // if the up and down button are both pressed, enter the settings view
     if (btnArray[btn->UP] == HIGH && btnArray[btn->DOWN] == HIGH) {
         // currentView = PROGRAMMER_VIEW;
-        // view->setup_v(IR_Util::menuList[currentView]);
+        // view->setup_v(IR_Util::MENU_LIST[currentView]);
         // view->setBacklightMode(true);
         settingsLoop();
         view->setBacklightTimer(ONE_MIN / 4); // TODO - remove offset
+    }
+}
+
+void Controller::decodeUdpPacket(byte buffer[], u_int16_t bufferLen) {
+    if (verifyUdpHeader(buffer, bufferLen)) {
+        switch (buffer[MESSAGE_TYPE_INDEX])
+        {
+        case REMOTE_MESSAGE_TYPE:
+            decodeUdpRemote(buffer, bufferLen);
+            break;
+        case STATUS_MESSAGE_TYPE:
+            // TODO - Future Implementation
+            break;
+        case CONFIG_MESSAGE_TYPE:
+            // TODO - Future Implementation
+            break;
+        default:
+            break;
+        }   
     }
 }
 
@@ -40,7 +59,7 @@ void Controller::homeViewBtnPress() {
 //     // if the up and down button are both pressed, enter the settings view
 //     if (btnArray[btn->UP] == HIGH && btnArray[btn->DOWN] == HIGH) {
 //         // currentView = PROGRAMMER_VIEW;
-//         // view->setup_v(IR_Util::menuList[currentView]);
+//         // view->setup_v(IR_Util::MENU_LIST[currentView]);
 //         // view->setBacklightMode(true);
 //         settingsLoop();
 //         view->setBacklightTimer(ONE_MIN / 4); // TODO - remove offset
@@ -49,7 +68,7 @@ void Controller::homeViewBtnPress() {
 
 void Controller::settingsLoop() {
     currentView = PROGRAMMER_VIEW;
-    view->setup_v(IR_Util::menuList[currentView]);
+    view->setup_v(IR_Util::MENU_LIST[currentView]);
     view->setBacklightMode(true);
     bool continueLoop = true;
     while (continueLoop) {
@@ -72,11 +91,11 @@ bool Controller::settingsViewBtnPress() {
             currentView = (currentView + 1) % MENU_CNT;
         else
             currentView = (currentView == 0) ? MENU_CNT - 1 : --currentView;
-        view->setup_v(IR_Util::menuList[currentView]);
+        view->setup_v(IR_Util::MENU_LIST[currentView]);
     }
     else if (btnArray[btn->RIGHT]) {
         subSettingChoice();
-        view->setup_v(IR_Util::menuList[currentView]);
+        view->setup_v(IR_Util::MENU_LIST[currentView]);
     }
     return exitSettings;
 }
@@ -178,7 +197,7 @@ void Controller::assignIrControl() {
 }
 
 bool Controller::selectDevice(uint8_t &dev) {
-    view->deviceSelect_v(IR_Util::devices[dev]);
+    view->deviceSelect_v(IR_Util::DEVICES[dev]);
     bool selectionMade = false;
     bool continueLoop = true;
     while (continueLoop) {
@@ -192,11 +211,11 @@ bool Controller::selectDevice(uint8_t &dev) {
             }
             else if (btnArray[btn->UP] == HIGH) {
                 dev = (dev + 1) % DEV_CNT;
-                view->deviceSelect_v(IR_Util::devices[dev]);
+                view->deviceSelect_v(IR_Util::DEVICES[dev]);
             }
             else {
                 dev = (dev == 0) ? DEV_CNT - 1 : --dev;
-                view->deviceSelect_v(IR_Util::devices[dev]);
+                view->deviceSelect_v(IR_Util::DEVICES[dev]);
             }
         }
     }
@@ -204,7 +223,7 @@ bool Controller::selectDevice(uint8_t &dev) {
 }
 
 bool Controller::selectFunction(uint8_t &func) {
-    view->funcSelect_v(IR_Util::ir_func[func]);
+    view->funcSelect_v(IR_Util::IR_FUNC[func]);
     bool selectionMade = false;
     bool continueLoop = true;
     while (continueLoop) {
@@ -218,11 +237,11 @@ bool Controller::selectFunction(uint8_t &func) {
             }
             else if (btnArray[btn->UP] == HIGH) {
                 func = (func + 1) % FUNC_CNT;
-                view->funcSelect_v(IR_Util::ir_func[func]);
+                view->funcSelect_v(IR_Util::IR_FUNC[func]);
             }
             else {
                 func = (func == 0) ? FUNC_CNT - 1 : --func;
-                view->funcSelect_v(IR_Util::ir_func[func]);
+                view->funcSelect_v(IR_Util::IR_FUNC[func]);
             }
         }
     }
@@ -261,4 +280,34 @@ bool Controller::saveAllSetting() {
         // TODO - save all setting to sd card
     }
     return saveSettings;
+}
+
+
+bool Controller::verifyUdpHeader(byte buffer[], u_int16_t bufferLen) {
+    bool validHeader = false;
+    if (bufferLen > UDP_HEADER_SIZE) {
+        validHeader = true;
+        byte verifier = 0x01;
+        for (size_t i = 0; i < UDP_HEADER_SIZE; i++) {
+            if (buffer[i] != verifier) {
+                validHeader = false;
+            }
+            verifier = verifier << 1;
+        }
+    }
+    return validHeader;
+}
+
+
+void Controller::decodeUdpRemote(byte buffer[], u_int16_t bufferLen) {
+    if (bufferLen == REMOTE_MESSAGE_SIZE) {
+        
+        byte device = buffer[MESSAGE_TYPE_INDEX + 1];
+        byte function = buffer[MESSAGE_TYPE_INDEX + 2];
+
+        if (device < DEV_CNT && function < FUNC_CNT) {
+            view->transmitInfo_v(IR_Util::DEVICES[device], IR_Util::IR_FUNC[function]);
+            // TODO - implement the transmitting the IR signal
+        }
+    }
 }

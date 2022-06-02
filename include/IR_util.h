@@ -24,21 +24,23 @@
 
 #define UDP_PORT 6000
 #define MAX_UDP_BUFFER 32
+#define UDP_HEADER_SIZE 5
+#define MESSAGE_TYPE_INDEX 5
 #define REMOTE_MESSAGE_TYPE 0x52
 #define STATUS_MESSAGE_TYPE 0x53
 #define CONFIG_MESSAGE_TYPE 0x43
+#define REMOTE_MESSAGE_SIZE 8
 
 namespace UDP_Util {
 
-    // Unique for each ethernet shield used
-    // const byte MAC[] = { 0xA8, 0x61, 0x0A, 0xAE, 0x2E, 0x6E };
+    const byte UDP_HEADER[] = { 0x01, 0x02, 0x04, 0x08, 0x10 };
     
 } // end of UDP_Util
 
 namespace IR_Util {
 
     #define FUNC_CNT 18
-    const String ir_func[] = {  // INDEX
+    const String IR_FUNC[] = {  // INDEX
         "Power",                // 0
         "Back/Exit",            // 1
         "Home",                 // 2
@@ -63,10 +65,10 @@ namespace IR_Util {
     // #define FUNC_SIZE sizeof(IR_Util::ir_func) / sizeof(IR_Util::ir_func[0])
 
     #define DEV_CNT 2
-    const String devices[] = {"TV", "Receiver"};
+    const String DEVICES[] = {"TV", "Receiver"};
 
     #define MENU_CNT 3
-    const String menuList[] = {"Programmer", "IP Address", "LCD Backlight"};
+    const String MENU_LIST[] = {"Programmer", "IP Address", "LCD Backlight"};
     
     #define PROGRAMMER_VIEW 0
     #define NETWORK_VIEW 1

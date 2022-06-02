@@ -81,11 +81,12 @@ void loop() {
         lcd.transmitInfo_v("", "");
     }
 
+    // checks to see if a udp message has been received.
     int packetSize = udp.parsePacket();
     if (packetSize > 0) {
-        // checks to see if a udp message has been received.
-
-
+        u_int16_t bufferLen = min(packetSize, MAX_UDP_BUFFER);
+        udp.readBytes(buffer, bufferLen);
+        ctrl.decodeUdpPacket(buffer, bufferLen);
         udp.flush();
     }
 

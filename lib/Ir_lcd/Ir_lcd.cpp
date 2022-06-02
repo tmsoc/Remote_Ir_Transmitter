@@ -64,7 +64,7 @@ void Ir_lcd::transmitInfo_v(const String &dev, const String &func) {
     lcd.print(F("Dev: "));
     lcd.print(dev);
     lcd.setCursor(0, 1);
-    lcd.print(F("Func: "));
+    lcd.print(F("Fun: "));
     lcd.print(func);
 }
 
