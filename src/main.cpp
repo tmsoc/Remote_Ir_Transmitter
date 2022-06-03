@@ -56,9 +56,7 @@ void setup() {
     lcd.initializing_v(2);
 
     // ----- SECTION TO IMPORT PROGRAM DATA ------
-    Eeprom eeprom;
-    delay(5);
-    eeprom.begin();
+    EEPROM.begin();
     ctrl.importStoredData();
     // ctrl.exportLocalData();
     delay(500);

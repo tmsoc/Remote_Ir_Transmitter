@@ -45,5 +45,6 @@ private:
     void endWriteTransmission();
 };
 
+extern EEPROM_24xx64 EEPROM;
 
 #endif // EEPROM_24XX64

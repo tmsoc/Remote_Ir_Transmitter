@@ -5,10 +5,10 @@
 
 #include "EEPROM_24xx64.h"
 
-#define LEFT_PIN 0
-#define RIGHT_PIN 1
-#define UP_PIN 4
-#define DOWN_PIN 5
+#define UP_PIN 0
+#define DOWN_PIN 1
+#define LEFT_PIN 4
+#define RIGHT_PIN 5
 
 #define ASSIGNED_BYTE_SIZE 1
 #define PROTOCOL_BYTE_SIZE 1
@@ -27,6 +27,7 @@
 
 #define IR_RECEIVE_PIN 2
 #define IR_SEND_PIN 3
+#define IR_REPEAT_CNT 0
 // #define ENABLE_LED_FEEDBACK true
 // #define IR_FEEDBACK_PIN 6
 
@@ -101,7 +102,7 @@ namespace IR_Util {
 #define LCD_ROW_CNT 2
 
 
-typedef EEPROM_24xx64 Eeprom;
+// typedef EEPROM_24xx64 Eeprom;
 #define EEPROM_ADDRESS 0x50
 #define BACKLIGHT_EEPROM_OFFSET 1000
 

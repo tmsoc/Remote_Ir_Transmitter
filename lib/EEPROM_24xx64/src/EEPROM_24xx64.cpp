@@ -151,3 +151,4 @@ void EEPROM_24xx64::endWriteTransmission() {
 }
 
 
+EEPROM_24xx64 EEPROM;

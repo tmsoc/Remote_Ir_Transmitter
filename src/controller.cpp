@@ -17,19 +17,9 @@ void Controller::setBacklightMode(bool alwaysOn) {
 }
 
 void Controller::homeViewBtnPress() {
-    view->setBacklightTimer(ONE_MIN / 4); // TODO - Remove offset
-    // if (currentView == LCD_MAIN_VIEW) {
-    //     mainViewBtnPress();
-    // }
-    // else {
-    //     settingsViewBtnPress();
-    // }
-    
+    view->setBacklightTimer(ONE_MIN / 4); // TODO - Remove offset    
     // if the up and down button are both pressed, enter the settings view
     if (btnArray[btn->UP] == HIGH && btnArray[btn->DOWN] == HIGH) {
-        // currentView = PROGRAMMER_VIEW;
-        // view->setup_v(IR_Util::MENU_LIST[currentView]);
-        // view->setBacklightMode(true);
         settingsLoop();
         view->setBacklightTimer(ONE_MIN / 4); // TODO - remove offset
     }
@@ -56,11 +46,11 @@ void Controller::decodeUdpPacket(byte buffer[], u_int16_t bufferLen) {
 
 
 void Controller::importStoredData() {
-    Eeprom eeprom;
+    // Eeprom eeprom;   // TODO - Remove later
     for (size_t i = 0; i < DEV_CNT * FUNC_CNT; i++) {
         byte buffer[FUNCTION_SIZE];
         size_t offset = i * FUNCTION_SIZE;
-        eeprom.eepromRead(EEPROM_ADDRESS, offset, buffer, FUNCTION_SIZE);
+        EEPROM.eepromRead(EEPROM_ADDRESS, offset, buffer, FUNCTION_SIZE);
         memcpy(&func[i], buffer, FUNCTION_SIZE);
         
         //For troubleshooting
@@ -74,19 +64,23 @@ void Controller::importStoredData() {
         // Serial.print(" ");
         // Serial.println(func[i].command, HEX);        
     }
-    backlightSetting = eeprom.eepromRead(EEPROM_ADDRESS, BACKLIGHT_EEPROM_OFFSET);
+    backlightSetting = EEPROM.eepromRead(EEPROM_ADDRESS, BACKLIGHT_EEPROM_OFFSET);
     view->setBacklightMode(backlightSetting);
 }
 
 
 void Controller::exportLocalData() const {
-    Eeprom eeprom;
-    for (size_t i = 0; i < DEV_CNT * FUNC_CNT; i++) {
-        byte buffer[FUNCTION_SIZE];
-        size_t offset = i * FUNCTION_SIZE;
-        memcpy(buffer, &func[i], FUNCTION_SIZE);
-        eeprom.eepromWrite(EEPROM_ADDRESS, offset, buffer, FUNCTION_SIZE);
-    }
+    // Eeprom eeprom;   // TODO - Remove later
+    // for (size_t i = 0; i < DEV_CNT * FUNC_CNT; i++) {
+    //     byte buffer[FUNCTION_SIZE];
+    //     size_t offset = i * FUNCTION_SIZE;
+    //     memcpy(buffer, &func[i], FUNCTION_SIZE);
+    //     eeprom.eepromWrite(EEPROM_ADDRESS, offset, buffer, FUNCTION_SIZE);
+    // }
+    size_t bufferSize = DEV_CNT * FUNC_CNT * FUNCTION_SIZE;
+    byte buffer[bufferSize];
+    memcpy(buffer, &func, bufferSize);
+    EEPROM.eepromWrite(EEPROM_ADDRESS, 0, buffer, bufferSize);
 }
 
 
@@ -161,8 +155,8 @@ void Controller::backlightSettingsConfig() {
         }
     }
     view->saving_v();
-    Eeprom eeprom;
-    eeprom.eepromWrite(EEPROM_ADDRESS, BACKLIGHT_EEPROM_OFFSET, byte(backlightSetting));
+    // Eeprom eeprom;   // TODO - Remove later
+    EEPROM.eepromWrite(EEPROM_ADDRESS, BACKLIGHT_EEPROM_OFFSET, byte(backlightSetting));
     delay(3000);
 }
 
@@ -337,8 +331,8 @@ bool Controller::saveAllSetting() {
     }
     if (saveSettings) {
         view->saving_v();
+        exportLocalData();
         delay(3000);
-        // TODO - save all setting to sd card
     }
     return saveSettings;
 }

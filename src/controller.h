@@ -11,6 +11,7 @@
 #include "IR_util.h"
 #include "Ir_lcd.h"
 #include "NavButtons.h"
+#include "EEPROM_24xx64.h"
 
 class Controller {
 public:
