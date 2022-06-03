@@ -37,7 +37,7 @@ u_int16_t wifiStatus = WL_IDLE_STATUS;
 // uint8_t currentView = LCD_MAIN_VIEW;
 
 // The controller
-Controller ctrl(lcd, navInput, navArray, functions); // Needs sender, & receiver
+Controller ctrl(lcd, navInput, navArray, functions); 
 
 void setup() {
     // Serial.begin(115200);
@@ -60,6 +60,7 @@ void setup() {
     delay(5);
     eeprom.begin();
     ctrl.importStoredData();
+    // ctrl.exportLocalData();
     delay(500);
 
 

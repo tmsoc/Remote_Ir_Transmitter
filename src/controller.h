@@ -53,6 +53,12 @@ public:
      */
     void importStoredData();
 
+    /**
+     * 
+     * 
+     */
+    void exportLocalData() const;
+
 private:
 
     // Menu navigation

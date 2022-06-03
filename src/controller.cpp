@@ -61,19 +61,32 @@ void Controller::importStoredData() {
         byte buffer[FUNCTION_SIZE];
         size_t offset = i * FUNCTION_SIZE;
         eeprom.eepromRead(EEPROM_ADDRESS, offset, buffer, FUNCTION_SIZE);
-        func[i].assigned = buffer[0];
-        if (func[i].assigned) {
-            func[i].protocol = buffer[1];
-            func[i].address = buffer[2];
-            func[i].address = func[i].address << 8;
-            func[i].address = func[i].address | buffer[3];
-            func[i].command = buffer[4];
-            func[i].command = func[i].command << 8;
-            func[i].command = func[i].command | buffer[5];
-        }
+        memcpy(&func[i], buffer, FUNCTION_SIZE);
+        
+        //For troubleshooting
+        // Serial.print(i);
+        // Serial.print(") ");
+        // Serial.print(func[i].assigned, HEX);
+        // Serial.print(" ");
+        // Serial.print(func[i].protocol, HEX);
+        // Serial.print(" ");
+        // Serial.print(func[i].address, HEX);
+        // Serial.print(" ");
+        // Serial.println(func[i].command, HEX);        
     }
     backlightSetting = eeprom.eepromRead(EEPROM_ADDRESS, BACKLIGHT_EEPROM_OFFSET);
     view->setBacklightMode(backlightSetting);
+}
+
+
+void Controller::exportLocalData() const {
+    Eeprom eeprom;
+    for (size_t i = 0; i < DEV_CNT * FUNC_CNT; i++) {
+        byte buffer[FUNCTION_SIZE];
+        size_t offset = i * FUNCTION_SIZE;
+        memcpy(buffer, &func[i], FUNCTION_SIZE);
+        eeprom.eepromWrite(EEPROM_ADDRESS, offset, buffer, FUNCTION_SIZE);
+    }
 }
 
 
