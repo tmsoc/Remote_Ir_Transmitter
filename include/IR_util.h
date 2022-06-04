@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#include "EEPROM_24xx64.h"
+// #include "EEPROM_24xx64.h"
 
 #define UP_PIN 0
 #define DOWN_PIN 1
@@ -16,20 +16,9 @@
 #define COMMAND_BYTE_SIZE 2
 #define FUNCTION_SIZE 6
 
-// #define PROTOCOL_BYTE_SIZE 1
-// #define ADDRESS_BYTE_SIZE 2
-// #define COMMAND_BYTE_SIZE 2
-// #define EXTRA_BYTE_SIZE 2
-// #define NUMBEROFBITS_BYTE_SIZE 2
-// #define FLAGS_BYTE_SIZE 1
-// #define DECODED_RAW_DATA_BYTE_SIZE 4
-// #define IR_MESSAGE_OFFSET 14
-
 #define IR_RECEIVE_PIN 2
 #define IR_SEND_PIN 3
 #define IR_REPEAT_CNT 0
-// #define ENABLE_LED_FEEDBACK true
-// #define IR_FEEDBACK_PIN 6
 
 #define UDP_PORT 6000
 #define MAX_UDP_BUFFER 32
@@ -78,6 +67,12 @@ namespace IR_Util {
 
     #define MENU_CNT 3
     const String MENU_LIST[] = {"Programmer", "IP Address", "LCD Backlight"};
+
+    #define PROGRAM_OPTION_CNT 2
+    const String PROGRAM_OPTION_LIST[] = {"Assign", "Delete"};
+
+    #define ASSIGN_FUNCTION 0
+    #define DELETE_FUNCTION 1
     
     #define PROGRAMMER_VIEW 0
     #define NETWORK_VIEW 1
@@ -108,7 +103,9 @@ namespace IR_Util {
 
 
 #define ONE_MIN 60000
-
+#define THIRTY_SEC 30000
+#define FIVE_SEC 5000
+#define THREE_SEC 3000
 
 
 #endif /* IR_UTIL_H */

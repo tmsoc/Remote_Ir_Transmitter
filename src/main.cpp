@@ -40,7 +40,7 @@ u_int16_t wifiStatus = WL_IDLE_STATUS;
 Controller ctrl(lcd, navInput, navArray, functions); 
 
 void setup() {
-    Serial.begin(115200);
+    // Serial.begin(115200);
     // delay(5000);
     // Serial.println(sizeof(decode_type_t));
 
@@ -63,9 +63,9 @@ void setup() {
 
 
     lcd.initializing_v(3);
-    IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK);
-    IrReceiver.stop();
-    IrSender.begin(IR_SEND_PIN, ENABLE_LED_FEEDBACK);
+    IrSender.begin(IR_SEND_PIN, ENABLE_LED_FEEDBACK, LED_BUILTIN);
+    IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK, LED_BUILTIN);
+    // IrReceiver.stop();   // If set to stop, feedback led is disabled for send & receive.
     delay(500);
 
 

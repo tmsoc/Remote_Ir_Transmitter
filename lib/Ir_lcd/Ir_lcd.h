@@ -43,8 +43,10 @@ public:
     void deviceSelect_v(const String &dev);
     
     void funcSelect_v(const String &func);
+
+    void programActionSelect_v(const String &action);
     
-    void irSignalInfo_v(const String &protocal, uint16_t address, uint8_t command);
+    void irSignalInfo_v(const String &protocol, uint16_t address, uint8_t command);
 
     void wifiNotConnected_v();
 

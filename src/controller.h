@@ -66,6 +66,7 @@ private:
     void settingsLoop();
     bool settingsViewBtnPress();
     void subSettingChoice();
+    void subProgrammerChoice(uint8_t action, uint8_t device, uint8_t function);
     // LCD backlight configuration
     void backlightSettingsConfig();
     // Network functions
@@ -76,11 +77,15 @@ private:
     void assignIrControl();
     bool selectDevice(uint8_t &dev);
     bool selectFunction(uint8_t &func);
-    bool receiveIrSignal(uint8_t &prot, uint16_t &addr, uint8_t &command);
+    void selectFunctionAction(uint8_t device, uint8_t function);
+    void assignIrSignal(uint8_t device, uint8_t function);
+    void deleteIrSignal(uint8_t device, uint8_t function);
     // EEPROM
     bool saveAllSetting();
     // IR transmit/receive
     void transmitIRFunction(const IR_Util::IRFunction& function) const;
+    // Utility Functions
+    
 
 
     Ir_lcd *view;
