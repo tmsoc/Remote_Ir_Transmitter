@@ -206,9 +206,9 @@ void Controller::decodeUdpRemote(byte buffer[], u_int16_t bufferLen) {
         byte function = buffer[MESSAGE_TYPE_INDEX + 2];
 
         if (device < DEV_CNT && function < FUNC_CNT) {
-            if (func[device * DEV_CNT + function].assigned) {
+            if (func[device * FUNC_CNT + function].assigned) {
                 view->transmitInfo_v(IR_Util::DEVICES[device], IR_Util::IR_FUNC[function]);
-                transmitIRFunction(func[device * DEV_CNT + function]);
+                transmitIRFunction(func[device * FUNC_CNT + function]);
             }
         }
     }
