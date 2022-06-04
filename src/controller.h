@@ -79,6 +79,8 @@ private:
     bool receiveIrSignal(uint8_t &prot, uint16_t &addr, uint8_t &command);
     // EEPROM
     bool saveAllSetting();
+    // IR transmit/receive
+    void transmitIRFunction(const IR_Util::IRFunction& function) const;
 
 
     Ir_lcd *view;

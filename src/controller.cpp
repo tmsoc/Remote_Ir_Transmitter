@@ -197,8 +197,10 @@ void Controller::decodeUdpRemote(byte buffer[], u_int16_t bufferLen) {
         byte function = buffer[MESSAGE_TYPE_INDEX + 2];
 
         if (device < DEV_CNT && function < FUNC_CNT) {
-            view->transmitInfo_v(IR_Util::DEVICES[device], IR_Util::IR_FUNC[function]);
-            // TODO - implement the transmitting the IR signal
+            if (func[device * DEV_CNT + function].assigned) {
+                view->transmitInfo_v(IR_Util::DEVICES[device], IR_Util::IR_FUNC[function]);
+                transmitIRFunction(func[device * DEV_CNT + function]);
+            }
         }
     }
 }
@@ -338,3 +340,44 @@ bool Controller::saveAllSetting() {
 }
 
 
+void Controller::transmitIRFunction(const IR_Util::IRFunction& function) const {
+    switch (function.protocol)
+    {
+    case DENON:
+        Serial.println("DENON Send");
+        IrSender.sendDenon(function.address, function.command, IR_REPEAT_CNT);
+        break;
+    case JVC:
+        Serial.println("JVC Send");
+        // casts are required to specify the right function
+        IrSender.sendJVC((uint8_t) function.address, (uint8_t) function.command, IR_REPEAT_CNT);
+        break;
+    case LG:
+        Serial.println("LG Send");
+        IrSender.sendLG(function.address, function.command, IR_REPEAT_CNT);
+        break;
+    case NEC:
+        Serial.println("NEC Send");
+        IrSender.sendNEC(function.address, function.command, IR_REPEAT_CNT);
+        break;
+    case PANASONIC:
+        Serial.println("Panasonic Send");
+        IrSender.sendPanasonic(function.address, function.command, IR_REPEAT_CNT);
+        break;
+    case SAMSUNG:
+        Serial.println("SAMSUNG Send");
+        IrSender.sendSamsung(function.address, function.command, IR_REPEAT_CNT);
+        break;
+    case SHARP:
+        Serial.println("SHARP Send");
+        IrSender.sendSharp(function.address, function.command, IR_REPEAT_CNT);
+        break;
+    case SONY:
+        Serial.println("SONY Send");
+        IrSender.sendSony(function.address, function.command, IR_REPEAT_CNT);
+        break;
+    default:
+        Serial.println("Send Unknown");
+        break;
+    }
+}
